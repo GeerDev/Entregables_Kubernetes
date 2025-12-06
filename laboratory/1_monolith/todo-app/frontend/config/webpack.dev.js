@@ -6,7 +6,7 @@ module.exports = merge(common, {
   devtool: 'eval-source-map',
   devServer: {
     proxy: {
-      '/api/': 'http://localhost:3000',
+      '/api/': 'http://localhost:4000',
     },
     port: 8081,
   },
