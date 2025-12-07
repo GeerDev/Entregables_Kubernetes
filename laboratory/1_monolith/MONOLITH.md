@@ -9,9 +9,7 @@
 | 2.1 | [Subir la imagen de Docker que vamos a utilizar a un registro o cargarla en Minikube](#subir-la-imagen-de-docker-que-vamos-a-utilizar-a-un-registro-o-cargarla-en-minikube) |
 | 2.2 | [Comprobación de los elementos del Deployment](#comprobación-de-los-elementos-del-deployment) |
 | 2.3 | [Crear un servicio LoadBalancer para acceder a la app desde fuera del cluster](#crear-un-servicio-loadbalancer-para-acceder-a-la-app-desde-fuera-del-cluster) |
-| 2.4 | **[Solo por comprobar y aprender accedemos a los pods internamente](#solo-por-comprobar-y-aprender-accedemos-a-los-pods-internamente)** |
-| 2.4.1 | [Utilizando port foward](#utilizando-port-foward) |
-| 2.4.2 | [Utilizando busy box](#utilizando-busy-box) |
+| 2.4 | [Solo por comprobar y aprender accedemos a los pods internamente](#solo-por-comprobar-y-aprender-accedemos-a-los-pods-internamente) |
 | **3.0** | **[Preguntas y reflexiones relacionadas](#preguntas-y-reflexiones-relacionadas)** |
 
 ---
