@@ -17,7 +17,7 @@ cd ./todo-app
 npm i
 ```
 
-**Nota:** Añadimos a nivel de raiz de la carpeta `laboratory` un `.gitignore` para ir descartando subir las dependencias instaladas.
+**Nota:** Añadimos a nivel de raiz de la carpeta `laboratory` un `.gitignore` para ir descartando subir las dependencias instaladas y las variables de entorno.
 
 - Le echamos un ojo por encima a los 2 proyectos y establecemos las variables de entorno en este caso: `NODE_ENV` Y `PORT`.
 ```bash
@@ -59,4 +59,11 @@ docker run -d -p 4000:4000 \
 
 ## Despliegue en Kubernetes
 
-- 
+### Subir la imagen de Docker que vamos a utilizar a un registro público o cargarla en Minikube.
+### Crear el deployment y comprobar que esta funcionando correctamente.
+### Crear un servicio LoadBalancer para acceder a la app desde fuera del cluster. 
+
+## Preguntas y reflexiones relacionadas
+
+1. ¿Se puede crear el deployment utilizando una imagen que tengas localmente en tu máquina?
+2. ¿Aparte del servicio LoadBalancer es necesario un servicio interno adicional que abarque tu deployment?

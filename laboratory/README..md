@@ -8,4 +8,3 @@ Se trata de la misma aplicación pero en este caso la persistencia en memoria se
 
 ## Ejercicio 3. Aplicación Distribuida.
 See trata de dos aplicaciones, una UI expuesta a través de un nginx y una API que corre sobre express/nodejs y se conecta con una base de datos postgres.
-
