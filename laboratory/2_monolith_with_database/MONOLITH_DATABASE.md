@@ -53,3 +53,4 @@ Comprobamos que ahora los datos si son persistentes
 3. ¿Qué mas mecanismos de ejecutar seeders en base de datos puedes hacer?
 4. ¿Podemos tener accesible desde el LoadBalancer el ejercicio anterior y este a la vez?
 5. ¿Qué pasa si cambiamos las variables de entorno del Deployment sin tumbarlo?
+6. ¿Podemos escalar y desescalar el aplicativo?
