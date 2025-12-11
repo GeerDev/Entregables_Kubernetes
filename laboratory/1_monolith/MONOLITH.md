@@ -87,6 +87,10 @@ La borramos y ahora vamos a cargar la imagen al ambiente de Minikube
 
 ### Crear un servicio LoadBalancer para acceder a la app desde fuera del cluster
 
+minikube tunnel
+kubectl get svc
+Verificar `http://REPLACE_WITH_EXTERNAL_IP:8080`
+
 ### Solo por comprobar y aprender accedemos a los pods internamente
 
 Utilizando port foward
