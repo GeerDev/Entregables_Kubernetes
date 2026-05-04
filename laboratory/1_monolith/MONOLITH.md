@@ -1,19 +1,5 @@
 # Monolito en memoria
 
-## 📑 Tabla de Contenidos
-
-| Nivel | Sección |
-| :---: | :------ |
-| **1.0** | **[Probamos la aplicación en local y utilizando contenedores](#probamos-la-aplicación-en-local-y-utilizando-contenedores)** |
-| **2.0** | **[Despliegue en Kubernetes](#despliegue-en-kubernetes)** |
-| 2.1 | [Subir la imagen de Docker que vamos a utilizar a un registro o cargarla en Minikube](#subir-la-imagen-de-docker-que-vamos-a-utilizar-a-un-registro-o-cargarla-en-minikube) |
-| 2.2 | [Comprobación de los elementos del Deployment](#comprobación-de-los-elementos-del-deployment) |
-| 2.3 | [Crear un servicio LoadBalancer para acceder a la app desde fuera del cluster](#crear-un-servicio-loadbalancer-para-acceder-a-la-app-desde-fuera-del-cluster) |
-| 2.4 | [Solo por comprobar y aprender accedemos a los pods internamente](#solo-por-comprobar-y-aprender-accedemos-a-los-pods-internamente) |
-| **3.0** | **[Preguntas y reflexiones relacionadas](#preguntas-y-reflexiones-relacionadas)** |
-
----
-
 ## Probamos la aplicación en local y utilizando contenedores
 
 - Nos copiamos la carpeta que contiene el frontal y el back en nuestro directorio.
@@ -65,39 +51,60 @@ docker build -t ger/awesome-monolith .
 - Corremos la imagen construida y comprobamos que hemos podido levantar el proyecto partiendo de la imagen en local.
 ```bash
 docker run -d -p 4000:4000 \
-  -e NODE_ENV=production \
+  -e NODE_ENV=development \
   -e PORT=4000 \
   ger/awesome-monolith
 ```
-**Nota:** Ya tenemos corriendo nuestro contenedor con el monolíto, algunas consideraciones, podemos ejecutarlo todo desde el mismo puerto esta vez porque la generación de la imagen crea el 'build' del front y luego el back se encarga de servir archivos estáticos desde public. Una última consideración el back no tiene un logger así que no puedes ver logs pero si puedes ver las llamadas desde el 'network' del navegador.
+
+Ya tenemos corriendo nuestro contenedor con el monolíto.
 
 ## Despliegue en Kubernetes
 
-### Subir la imagen de Docker que vamos a utilizar a un registro o cargarla en Minikube
+**Paso 1. Crear todo-app**
+Crear un Deployment para todo-app, usar el Dockerfile de este direetorio todo-app, para generar la imagen necesaria.
 
-Intentamos crear el Deployment ejecutandolo directamente
+Nota: Se puede usar la imagen lemoncodersbc/lc-todo-monolith:v5-2024
 
-Necesitamos subir la imagen o a un registro o cargarla en el ambiente de Minikube
+Al ejecutar un contenedor a partir de la imagen anaterior, el puerto por defecto es el 3000, pero se lo podemos alimentar a partir de variables de entorono, las variables de entorno serían las siguientes
 
-Subimos la imagen a un registro público o privado
+NODE_ENV : El entorno en que se está ejecutando el contenedor, nos vale cualquier valor que no sea test
+PORT : El puerto por el que va a escuchar el contenedor.
 
-La borramos y ahora vamos a cargar la imagen al ambiente de Minikube
+Comando ejecutado desde esta ubicación:
+```bash
+kubectl apply -f deployment_monolith.yaml
+```
 
-### Comprobación de los elementos del Deployment
+Comprobamos que esta todo desplegado:
 
-### Crear un servicio LoadBalancer para acceder a la app desde fuera del cluster
+![Deployment_monolith](../../images/Deployment_monolith.png)
+![Deployment_monolith_2](../../images/Deployment_monolith_2.png)
 
+**Paso 2. Acceder a todo-app desde fuera del clúster**
+Crear un LoadBalancer service para acceder al Deployment anteriormente creado desde fuera del clúster. Para poder utilizar un LoadBalancer con minikube seguir las instrucciones de este artículo
+
+Comando ejecutado desde esta ubicación:
+```bash
+kubectl apply -f service_monolith.yaml
+```
+
+Comprobamos que el servicio esta desplegado:
+
+![Deployment_service](../../images/Deployment_service.png)
+
+Y en otra terminal aparte para abrir el tunnel de Minikube:
+```bash
 minikube tunnel
-kubectl get svc
-Verificar `http://REPLACE_WITH_EXTERNAL_IP:8080`
+```
 
-### Solo por comprobar y aprender accedemos a los pods internamente
+He abierto ya el tunel:
 
-Utilizando port foward
+![Minikube_tunnel](../../images/Minikube_tunnel.png)
 
-Utilizando busy box
+Ahora la external-ip del servicio ya no está en "pending" y pasa a tener una ip:
 
-## Preguntas y reflexiones relacionadas
+![IP_tunnel](../../images/Ip_tunnel.png)
 
-1. ¿Se puede crear el Deployment utilizando una imagen que tengas localmente en tu máquina?
-2. ¿Aparte del servicio LoadBalancer es necesario un servicio interno adicional que abarque tu Deployment?
+Desde mi navegador ya tengo acceso a la app:
+
+![App_localhost](../../images/App_localhost.png)

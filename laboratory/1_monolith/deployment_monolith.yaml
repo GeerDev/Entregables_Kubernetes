@@ -16,11 +16,11 @@ spec:
     spec:
       containers:
         - name: todo-app
-          image: todo-app:latest
+          image: lemoncodersbc/lc-todo-monolith:v5-2024
           ports:
-            - containerPort: 4000
+            - containerPort: 3000
           env:
             - name: NODE_ENV
               value: development
             - name: PORT
-              value: "4000"
+              value: "3000"
