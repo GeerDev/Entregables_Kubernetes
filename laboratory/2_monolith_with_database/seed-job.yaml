@@ -1,0 +1,60 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: postgres-seed
+spec:
+  backoffLimit: 3
+  template:
+    spec:
+      restartPolicy: OnFailure
+      containers:
+        - name: seed
+          image: postgres:16
+          command: ["/bin/sh", "-c"]
+          args:
+            - |
+              echo "Esperando a que PostgreSQL esté listo..."
+              until pg_isready -h postgres-service -p 5432 -U "$DB_USER"; do
+                sleep 2
+              done
+
+              echo "Comprobando estado de la base de datos..."
+
+              DB_EXISTS=$(psql -h postgres-service -U "$DB_USER" -lqt | cut -d'|' -f1 | grep -qw todos_db && echo "yes" || echo "no")
+
+              if [ "$DB_EXISTS" = "yes" ]; then
+                TABLE_EXISTS=$(psql -h postgres-service -U "$DB_USER" -d todos_db -tAc \
+                  "SELECT EXISTS (SELECT FROM information_schema.tables WHERE table_schema='public' AND table_name='todos');")
+                HAS_DATA=$(psql -h postgres-service -U "$DB_USER" -d todos_db -tAc \
+                  "SELECT EXISTS (SELECT 1 FROM public.todos LIMIT 1);" 2>/dev/null || echo "f")
+              else
+                TABLE_EXISTS="f"
+                HAS_DATA="f"
+              fi
+
+              if [ "$DB_EXISTS" = "yes" ] && [ "$TABLE_EXISTS" = "t" ] && [ "$HAS_DATA" = "t" ]; then
+                echo "Base de datos, tabla y datos ya existen. Nada que hacer."
+              else
+                echo "Ejecutando script de seed..."
+                psql -h postgres-service -U "$DB_USER" -f /seed/todos_db.sql
+                echo "Seed completado."
+              fi
+          env:
+            - name: DB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: db-user
+            - name: PGPASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: db-password
+          volumeMounts:
+            - name: seed-script
+              mountPath: /seed
+              readOnly: true
+      volumes:
+        - name: seed-script
+          configMap:
+            name: seed-config
