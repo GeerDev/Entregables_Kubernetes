@@ -90,10 +90,14 @@ kubectl create secret generic postgres-secret \
 
 ![Secrets](../../images/Secrets.png)
 
-Crear un `StorageClass` para el aprovisionamineto dinámico de los recursos de persistencia
-Crear un `PersistentVolume` que referencie el StorageClass anterior
-Crear un `PersistentVolumeClaim` que referencie el StorageClass anterior
-Crear un `Cluster IP service`, de esta manera los pods del Deployment anterior serán capaces de llegar al StatefulSet
+Crear un `StorageClass` para el aprovisionamineto dinámico de los recursos de persistencia.
+
+Crear un `PersistentVolume` que referencie el StorageClass anterior.
+
+Crear un `PersistentVolumeClaim` que referencie el StorageClass anterior.
+
+Crear un `Cluster IP service`, de esta manera los pods del Deployment anterior serán capaces de llegar al StatefulSet.
+
 Crear el `StatefulSet` alimentando las variables de entorno y el volumen haciendo referencia al PersistentVolumeClaim creado anteriormente.
 
 Hemos creado los yaml con todo lo indicado, los 3 primeros son los relacionados al almacenamiento, el servicio y el statefulset y **los 2 últimos relacionados a la creación de un job encargado de ejecutar seed en base de datos** (está solución la hemos tomado siguiendo como referencia una de las propuestas en el apartado comentarios) 
@@ -132,16 +136,24 @@ Crear un Deployment para todo-app, usar el Dockerfile de este direetorio todo-ap
 
 Nota: Podéis usar la imagen lemoncodersbc/lc-todo-monolith-db:v5-2024
 
-Al ejecutar un contenedor a partir de la imagen anterior, el puerto por defecto es el 3000, pero se lo podemos alimentar a partir de variables de entorono, las variables de entorno serían las siguientes
+Al ejecutar un contenedor a partir de la imagen anterior, el puerto por defecto es el 3000, pero se lo podemos alimentar a partir de variables de entorono, las variables de entorno serían las siguientes.
 
-NODE_ENV : El entorno en que se está ejecutando el contenedor, nos vale cualquier valor que no sea test
-PORT : El puerto por el que va a escuchar el contenedor
-DB_HOST : El host donde se encuentra la base de datos
-DB_USER: El usuario que accede a la base de datos, podemos usar el de por defecto postgres
-DB_PASSWORD: El password para acceeder a la base de datos, podemos usar el de por defecto postgres
-DB_PORT : El puerto en el que postgres escucha 5432
-DB_NAME : El nombre de la base de datos, en todo-app/todos_db.sql, el script de inicialización recibe el nombre de todos_db
-DB_VERSION : La versión de postgres a usar, en este caso 10.4
+NODE_ENV : El entorno en que se está ejecutando el contenedor, nos vale cualquier valor que no sea test.
+
+PORT : El puerto por el que va a escuchar el contenedor.
+
+DB_HOST : El host donde se encuentra la base de datos.
+
+DB_USER: El usuario que accede a la base de datos, podemos usar el de por defecto postgres.
+
+DB_PASSWORD: El password para acceeder a la base de datos, podemos usar el de por defecto postgres.
+
+DB_PORT : El puerto en el que postgres escucha 5432.
+
+DB_NAME : El nombre de la base de datos, en todo-app/todos_db.sql, el script de inicialización recibe el nombre de todos_db.
+
+DB_VERSION : La versión de postgres a usar, en este caso 16.
+
 Crear un ConfigMap con todas las variables de entorno, que necesitarán los pods de este Deployment.
 
 NOTA: Las obligatorias son las de la base de datos, todas aquellas que comienzan por DB

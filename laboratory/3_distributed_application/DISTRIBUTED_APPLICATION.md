@@ -156,11 +156,6 @@ El back:
 
 Resumén de las conexiones:
 
-Mi navegador → http://127.0.0.1:49866/
-                      ↓ túnel de minikube
-              VM Minikube :30878
-                      ↓ NodePort
-              ingress-nginx-controller:80
-                      ↓ reglas del Ingress
-              /api/* → todo-api-service:3000
-              /*     → todo-front-service:80
+Mi navegador → http://127.0.0.1:49866/ → túnel de minikube → VM Minikube :30878 → NodePort → ingress-nginx-controller:80 → reglas del Ingress:
+  - /api/* → todo-api-service:3000
+  - /*     → todo-front-service:80
